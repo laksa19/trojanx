@@ -44,6 +44,7 @@ killall -q badvpn-udpgw
 echo ""
 echo "Starting TROJAN..."
 screen -AmdS trojanx trojan -c /etc/trojanx/config.json
+sleep 2
 echo "Starting UDPGW..."
 screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
 echo ""
