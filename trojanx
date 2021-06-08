@@ -50,7 +50,9 @@ echo "Set cron job (trojanx startup)..."
 
 echo ""
 read -p 'Trojan Password: ' passa
+passb=$(openssl rand -hex 20)
 sed -i 's/password1/'$passa'/' /etc/trojanx/config.json
+sed -i 's/password2/'$passb'/' /etc/trojanx/config.json
 echo ""
 echo "Starting TROJANX..."
 /usr/bin/trojanx
