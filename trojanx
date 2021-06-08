@@ -16,7 +16,7 @@ sleep 2
 killall -q screen
 killall -q trojan
 killall -q badvpn-udpgw
-
+clear
 # check IP
 IP=$(curl http://whatismyip.akamai.com/)
 
@@ -55,7 +55,7 @@ chmod +x /usr/bin/trojanx
 # add trojanx to cron
 echo "Set cron job (trojanx startup)..."
 (crontab -l 2>/dev/null; echo "@reboot /usr/bin/trojanx") | crontab -
-
+clear
 echo ""
 read -p 'Trojan Password: ' passa
 passb=$(openssl rand -hex 20)
@@ -63,10 +63,11 @@ sed -i 's/password1/'$passa'/' /etc/trojanx/config.json
 sed -i 's/password2/'$passb'/' /etc/trojanx/config.json
 echo ""
 echo "Starting TROJANX..."
+sleep 2
 /usr/bin/trojanx
 echo ""
 echo "=============Trojan Account============="
-echo "IP: $IP"
+echo "IP Address: $IP"
 echo "Trojan Port: 443"
 echo "UDPGW Port : 7300"
 echo "Trojan Password: $passa"
