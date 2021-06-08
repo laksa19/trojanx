@@ -4,6 +4,7 @@
 
 ### Source
   - Trojan GFW: https://github.com/trojan-gfw/trojan
+    - Trojan connection run on port 443 
   
   - BadVPN: https://github.com/ambrop72/badvpn
     - UDPGW connection run on port 7300
