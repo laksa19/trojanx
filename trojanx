@@ -10,6 +10,13 @@ apt install openssl -y
 apt install screen -y
 apt install psmisc -y
 
+sleep 2
+# killall trojanx
+
+killall -q screen
+killall -q trojan
+killall -q badvpn-udpgw
+
 # check IP
 IP=$(curl http://whatismyip.akamai.com/)
 
