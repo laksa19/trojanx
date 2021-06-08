@@ -9,35 +9,55 @@ apt update
 apt install openssl -y
 apt install screen -y
 
+# check IP
 IP=$(curl http://whatismyip.akamai.com/)
 
+# make trojanx dir
 mkdir -p /etc/trojanx
-
+# download dependency
 wget --show-progress --progress=bar:force -qO /usr/bin/trojan https://raw.githubusercontent.com/laksa19/trojanx/master/bin/trojan && chmod +x /usr/bin/trojan
 wget --show-progress --progress=bar:force -qO /etc/trojanx/config.json https://raw.githubusercontent.com/laksa19/trojanx/master/config/config.json
 wget --show-progress --progress=bar:force -qO /usr/bin/badvpn-udpgw https://raw.githubusercontent.com/laksa19/trojanx/master/bin/badvpn-udpgw && chmod +x /usr/bin/badvpn-udpgw 
- 
+# generating certificate 
 echo "Generating Certificate..."
 sleep 1
 cd /etc/trojanx
 openssl genrsa -out key.pem 2048
-openssl req -new -x509 -key key.pem -out cert.pem -days 3650 -nodes -x509 -subj "/C=ID/ST=East Java/L=Surabaya/O=Mikhmon/CN=Laksamadi Guko"
+openssl req -new -x509 -key key.pem -out cert.pem -days 3650 -nodes -x509 -subj "/C=ID/ST=East Java/L=Surabaya/O=TrojanX/CN=Laksamadi Guko"
 cd ..
-
-echo "Set cron job (trojan startup)..."
-(crontab -l 2>/dev/null; echo "@reboot screen -AmdS trojanx trojan -c /etc/trojanx/config.json") | crontab -
-echo "Set cron job (udpgw startup)..."
-(crontab -l 2>/dev/null; echo "@reboot screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300") | crontab -
-
 echo ""
-read -p 'Trojan Password: ' passa
-sed -i 's/password1/'$passa'/' /etc/trojanx/config.json
+
+# create trojanx runner
+cat >/usr/bin/trojanx <<EOL
+#!/bin/bash
+killall -q screen
+killall -q trojan
+killall -q badvpn-udpgw
 echo ""
 echo "Starting TROJAN..."
 screen -AmdS trojanx trojan -c /etc/trojanx/config.json
 echo "Starting UDPGW..."
 screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
 echo ""
+sleep 1
+EOL
+chmod +x /usr/bin/trojanx
+
+# add trojanx to cron
+echo "Set cron job (trojanx startup)..."
+(crontab -l 2>/dev/null; echo "@reboot /usr/bin/trojanx") | crontab -
+
+echo ""
+read -p 'Trojan Password: ' passa
+sed -i 's/password1/'$passa'/' /etc/trojanx/config.json
+echo ""
+echo "Starting TROJANX..."
+/usr/bin/trojanx
+echo ""
+echo "IP: $IP"
+echo "Trojan Port: 443"
+echo "UDPGW Port : 7300"
+echo "Trojan Password: $passa"
 echo ""
 echo "trojan://$passa@$IP:443"
-
+echo ""
