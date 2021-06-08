@@ -8,6 +8,7 @@ fi
 apt update
 apt install openssl -y
 apt install screen -y
+apt install psmisc -y
 
 # check IP
 IP=$(curl http://whatismyip.akamai.com/)
