@@ -6,7 +6,7 @@
   - Trojan GFW: https://github.com/trojan-gfw/trojan
   
   - BadVPN: https://github.com/ambrop72/badvpn
-    - For UDP connection on port 7300
+    - UDPGW connection run on port 7300
 
 
 ### Installation
